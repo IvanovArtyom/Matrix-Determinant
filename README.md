@@ -33,3 +33,53 @@ Note the alternation of signs.
 The determinant of larger matrices are calculated analogously, e.g. if M is a 4x4 matrix with first row ```[a, b, c, d]```, then:
 
 ```det(M) = a * det(a_minor) - b * det(b_minor) + c * det(c_minor) - d * det(d_minor)```
+### My solution:
+```C#
+using System.Collections.Generic;
+
+public class Matrix
+{
+    public static int Determinant(int[][] matrix)
+    {
+        if (matrix.Length == 1)
+            return matrix[0][0];
+
+        int det = 0;
+
+        for (int j = 0; j < matrix.Length; j++)
+        {
+            int value = matrix[0][j] * Determinant(CalculateMinor(matrix, 0, j));
+
+            det += (j % 2 == 0) ? value : -value;
+        }
+
+        return det;
+    }
+
+    public static int[][] CalculateMinor(int[][] matrix, int row, int column)
+    {
+        int[][] minor = new int[matrix.Length - 1][];
+        int index = 0;
+
+        for (int i = 0; i < matrix.Length; i++)
+        {
+            if (i == row)
+                continue;
+
+            List<int> line = new();
+
+            for (int j = 0; j < matrix.Length; j++)
+            {
+                if (j == column)
+                    continue;
+
+                line.Add(matrix[i][j]);
+            }
+
+            minor[index++] = line.ToArray();
+        }
+
+        return minor;
+    }
+}
+```
